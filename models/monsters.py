@@ -21,7 +21,7 @@ class Monster(monsterview.Enemy):
         self.health = health
         self.gold = gold
         self.interval = interval
-        self.frame_count = self.interval
+        self.frame_count = self.interval - 5
 
     def __str__(self):
         s = f'Monster {self.race} with ATK:{self.attack} HLTH:{self.health}'
@@ -34,6 +34,7 @@ class Monster(monsterview.Enemy):
             self.frame_count = 0
         self.frame_count += 1
 
+
     def isDead(self):
         return self.health <= 0
 
@@ -45,7 +46,7 @@ class Eyeball(Monster):
 
     def __init__(self):
         Monster.__init__(self, random.randint(
-            40, 720), random.randint(40, 550), "eyeball", 5, 20, 70, 1)
+            40, 1020), random.randint(450, 650), "eyeball", 5, 20, 70, 1)
         self.yell = '"SsSsSSss"'
 
     def __str__(self):
@@ -59,8 +60,22 @@ class Slime(Monster):
 
     def __init__(self):
         Monster.__init__(self, random.randint(
-            40, 720), random.randint(40, 550), "slime", 6, 30, 80, .5)
+            40, 1020), random.randint(450, 650), "slime", 6, 30, 80, .5)
         self.yell = '"#%@&$/?!"'
+
+    def __str__(self):
+        pass
+
+
+class Ooze(Monster):
+    """
+        killing a ooze rewards player 3 gold
+    """
+
+    def __init__(self):
+        Monster.__init__(self, random.randint(
+            40, 1020), random.randint(450, 650), "ooze", 3, 15, 30, .7)
+        self.yell = '"......"'
 
     def __str__(self):
         pass

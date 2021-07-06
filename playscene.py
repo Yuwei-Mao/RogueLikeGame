@@ -6,6 +6,7 @@ import controller
 import time
 from models import players
 from models import monsters
+from models import items
 
 
 def main():
@@ -18,18 +19,26 @@ def main():
 
     bg_list = ['image/bg0.png', 'image/bg4.png']
 
-    (background, monster_list) = rand_scene(bg_list)
-
     # create hero1 and monster, and set monster location
     hero1 = players.Player("hero1")
+    (background, monster_list) = rand_scene(bg_list, hero1)
 
     clock = pygame.time.Clock()
 
     player_list = pygame.sprite.Group()
     player_list.add(hero1)
 
+
+
+    frame_count = 0
+    attack_frame = 0
+    randx = random.randint(-60, 60)
+    randy = random.randint(-30, 30)
+
+    item_list = pygame.sprite.Group()
     """game loop"""
     while True:
+        frame_count += 1
         '''death detection. comment these lines if you wish'''
         if hero1.isDead():
             break
@@ -39,7 +48,9 @@ def main():
             sls = pygame.mixer.Sound('found_sound/switch_level.wav')
             sls.play()
             time.sleep(.5)
-            (background, monster_list) = rand_scene(bg_list)
+            # set new drop items
+            item_list = rand_item()
+            (background, monster_list) = rand_scene(bg_list, hero1)
 
         speed = 3
 
@@ -51,19 +62,19 @@ def main():
         if up:
             hero1.move(0, -speed)
         if up_up:
-            hero1.stop()
+            hero1.move(0, speed)
         if down:
             hero1.move(0, speed)
         if down_up:
-            hero1.stop()
+            hero1.move(0, -speed)
         if left:
             hero1.move(-speed, 0)
         if left_up:
-            hero1.stop()
+            hero1.move(speed, 0)
         if right:
             hero1.move(speed, 0)
         if right_up:
-            hero1.stop()
+            hero1.move(-speed, 0)
 
         hero1.update()
 
@@ -75,39 +86,90 @@ def main():
                 for m in mon:
                     m.attack_player(hero1)
 
+        collide_items = pygame.sprite.groupcollide(
+            player_list, item_list, False, True, collided=pygame.sprite.collide_circle)
+
+        if collide_items:
+            for ite in collide_items.values():
+                for i in ite:
+                    pick_sound = pygame.mixer.Sound('found_sound/pick_up.wav')
+                    pick_sound.play()
+                    i.effect(hero1)
+                    print('State Updated!!')
+                    print(hero1)
+
         surface.blit(background, (0, 0))
         player_list.draw(surface)
 
         hero1.draw_health(surface)
 
+        # play attack sound
         if attack:
-            # play attack sound
             attack_sound = pygame.mixer.Sound('found_sound/attack.wav')
             attack_sound.play()
-            text_surface = hero1.attack_monster(collide_monsters, monster_list)
+            (text_surface, damage_list) = hero1.attack_monster(
+                collide_monsters, monster_list)
+
+        if attack or attack_frame > 0:
+            # attack animation
+            attack_frame += 1
+            if attack_frame == 25:
+                attack_frame = 0
             surface.blit(text_surface, (hero1.rect.x, hero1.rect.y))
+            for d in damage_list:
+                surface.blit(d[0], (d[1] + 5, d[2] - 30))
 
         for m in monster_list:
-            m.update(hero1.rect.x, hero1.rect.y)
+            if frame_count == 20:
+                randx = random.randint(-60, 60)
+                randy = random.randint(-30, 30)
+            m.update(hero1.rect.x + randx,
+                     hero1.rect.y + randy)
             m.rect.x = m.x
             m.rect.y = m.y
 
+        item_list.draw(surface)
         monster_list.draw(surface)
         pygame.display.flip()
 
 
-def rand_scene(bg_list):
+def rand_item():
+    item_list = pygame.sprite.Group()
+    num_of_drops = random.randint(1, 5)
+    for i in range(num_of_drops):
+        index_of_drops = random.randint(1, 3)
+        if index_of_drops == 1:
+            item_list.add(items.Apple(random.randint(0, 1024), random.randint(0, 768)))
+        elif index_of_drops == 2:
+            item_list.add(items.BloodBottle(random.randint(0, 1024), random.randint(0, 768)))
+        elif index_of_drops == 3:
+            item_list.add(items.ChickenLeg(random.randint(0, 1024), random.randint(0, 768)))
+    return item_list
+
+
+def rand_scene(bg_list, hero):
     index = random.randint(0, len(bg_list)-1)
     last = bg_list[index]
     background = pygame.image.load(last).convert()
+    resx = 1024
+    resy = 0
+    if last == 'image/bg0.png':
+        resy = 450
+        hero.setPlayGround(resx, resy)
+        hero.setPos(100, 500)
+    elif last == 'image/bg4.png':
+        resy = 0
+        hero.setPlayGround(resx, resy)
     monster_list = pygame.sprite.Group()
     for i in range(random.randint(4, 7)):
         x = random.randint(0, 10)
         if x < 5:
             monster = monsters.Slime()
-        else:
+        elif x <= 10:
             monster = monsters.Eyeball()
+        monster.setPlayGround(resx, resy)
         monster_list.add(monster)
+
     return background, monster_list
 
 

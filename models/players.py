@@ -20,9 +20,12 @@ class Player(playerview.Hero):
         self.gold = 0
 
     def __str__(self):
-        s = f'{self.name} has HLTH:{self.current_health}'
+        s = f'{self.name} has HLTH:{self.current_health}/{self.max_health}'
+        s += f'\n ATTK:{self.attack}'
+        '''
         if self.weapon:
             s += f'\n  Wielding a {self.weapon.name}'
+        '''
         return s
 
     def get_gold(self, gold):
@@ -37,12 +40,16 @@ class Player(playerview.Hero):
     def attack_monster(self, collide_monsters, monster_list):
         """attacks a monster"""
         self.frame_count = 0
+        damage_list = []
         for mon in collide_monsters.values():
             for monster in mon:
-                monster.health -= self.attack
+                damage = self.attack + random.randint(-1, 3)
+                monster.health -= damage
+                damage_list.append((monster.vis_take_damage(
+                    True, damage), monster.rect.x, monster.rect.y))
                 if monster.health <= 0:
                     monster_list.remove(monster)
-        return self.vis_attack(True)
+        return (self.vis_attack(True), damage_list)
 
     def get_health(self, value):
         if self.current_health < self.max_health:
