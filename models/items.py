@@ -34,7 +34,9 @@ class Apple(Item):
         pass
 
     def effect(self, player):
+        health_ratio = player.current_health / player.max_health
         player.max_health += 20
+        player.current_health = int(player.max_health * health_ratio)
 
 
 class BloodBottle(Item):
@@ -49,7 +51,7 @@ class BloodBottle(Item):
         pass
 
     def effect(self, player):
-        player.get_health(player.max_health/4)
+        player.get_health(player.max_health/5)
 
 
 class ChickenLeg(Item):
