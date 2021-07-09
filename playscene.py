@@ -97,7 +97,7 @@ def main():
                     i.effect(hero1)
 
 
-        # surface.blit(background, (0, 0))
+        surface.blit(background, (0, 0))
         player_list.draw(surface)
 
         health_data = hero1.draw_health(surface)
