@@ -1,15 +1,17 @@
 import random
 import pygame
+from views import weaponview
 
 
-class Weapon():
+class Weapon(weaponview.attack):
 
-    def __init__(self, type, attack, cooldown):
+    def __init__(self, type, attack, cooldown, distance, x, y):
         '''
             type - type of the weapon(e.g. sword)
             attack - damage a weapon causes
             cooldown- time interval between two continuous attacks. impacts dps of a weapon
         '''
+        super().__init__(type, distance, x, y)
         self.type = type
         self.attack = attack
         self.cooldown = cooldown
@@ -18,34 +20,32 @@ class Weapon():
         pass
 
 
-class Sword():
-    def __init__(self):
-        Weapon.__init__(self, "sword", 5, 2)
+class Sword(Weapon):
+    def __init__(self, x, y):
+        Weapon.__init__(self, "sword", 5, 2, 10, x, y)
+
+    def attack(self, surface):
+        weaponview.attack.straight_attack(self, surface)
 
 
-class Arrow():
-    def __init__(self):
-        Weapon.__init__(self, "arrow", 7, 3)
+# class Wand(Weapon):
+#     def __init__(self, x, y):
+#         Weapon.__init__(self, "wand", 9, 6)
+#
+#
+# class Spear(Weapon):
+#     def __init__(self, x, y):
+#         Weapon.__init__(self, "spear", 6, 3)
+#
+#
+# class Axe(Weapon):
+#     def __init__(self, x, y):
+#         Weapon.__init__(self, "axe", 8, 5)
 
 
-class Wand():
-    def __init__(self):
-        Weapon.__init__(self, "wand", 9, 6)
-
-
-class Spear():
-    def __init__(self):
-        Weapon.__init__(self, "spear", 6, 3)
-
-
-class Axe():
-    def __init__(self):
-        Weapon.__init__(self, "axe", 8, 5)
-
-
-class Hammer():
-    def __init__(self):
-        Weapon.__init__(self, "hammer", 9, .8)
+class Hammer(Weapon):
+    def __init__(self, x, y):
+        Weapon.__init__(self, "hammer", 9, .8, 5, x, y)
 
 
 def roll_3_dice():

@@ -96,7 +96,8 @@ def main():
                     pick_sound.play()
                     i.effect(hero1)
 
-        surface.blit(background, (0, 0))
+
+        # surface.blit(background, (0, 0))
         player_list.draw(surface)
 
         health_data = hero1.draw_health(surface)
@@ -116,6 +117,12 @@ def main():
             surface.blit(text_surface, (hero1.rect.x, hero1.rect.y))
             for d in damage_list:
                 surface.blit(d[0], (d[1] + 5, d[2] - 30))
+
+
+        if attack:
+            hero1.weapon.x = hero1.rect.x
+            hero1.weapon.y = hero1.rect.y
+            hero1.weapon.straight_attack(surface)
 
         for m in monster_list:
             m.update(hero1.rect.x + 20, hero1.rect.y + 20)

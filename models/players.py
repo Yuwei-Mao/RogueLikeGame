@@ -12,7 +12,7 @@ class Player(playerview.Hero):
         """ Initialize with a name. """
         self.name = name
         self.attack = random.randrange(1, 5)
-        self.weapon = weapons.Sword()
+        self.weapon = weapons.Sword(self.rect.x, self.rect.y)
         self.attack += self.weapon.attack
         self.interval = 3
         self.frame_count = self.interval
