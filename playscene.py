@@ -6,6 +6,7 @@ import controller
 from models import players
 from models import monsters
 from models import items
+from models import weapons
 from views import sceneview
 
 
@@ -44,6 +45,11 @@ def main():
     icon_index = 0
 
     item_list = pygame.sprite.Group()
+
+    weapon_list = pygame.sprite.Group()
+    weapon_list.add(hero1.weapon)
+
+
     """game loop"""
     while True:
         frame_count += 1
@@ -80,12 +86,17 @@ def main():
         hero1.update()
 
         collide_monsters = pygame.sprite.groupcollide(
-            player_list, monster_list, False, False, collided=pygame.sprite.collide_circle)
+            weapon_list, monster_list, False, False, collided=pygame.sprite.collide_circle)
 
         if collide_monsters:
             for mon in collide_monsters.values():
                 for m in mon:
                     m.attack_player(hero1)
+            # if not attack:
+            #    if m.rect.x > hero1.rect.x:
+            #        hero1.rect.x -= 32
+            #    else:
+            #        hero1.rect.x += 32
 
         collide_items = pygame.sprite.groupcollide(
             player_list, item_list, False, True, collided=pygame.sprite.collide_circle)
@@ -108,14 +119,21 @@ def main():
             (text_surface, damage_list) = hero1.attack_monster(
                 collide_monsters, monster_list)
 
+
         if attack or attack_frame > 0:
             # attack animation
             attack_frame += 1
-            if attack_frame == 25:
+            if attack_frame == 15:
                 attack_frame = 0
             surface.blit(text_surface, (hero1.rect.x, hero1.rect.y))
             for d in damage_list:
                 surface.blit(d[0], (d[1] + 5, d[2] - 30))
+            for i in weapon_list:
+                i.vis_attack(hero1.left)
+        else:
+            for i in weapon_list:
+                i.vis_def()
+
 
         for m in monster_list:
             m.update(hero1.rect.x + 20, hero1.rect.y + 20)
@@ -136,8 +154,15 @@ def main():
                     (scene, monster_list) = rand_scene(hero1)
                     background = scene.background
                     item_list = rand_item(hero1.restrictx, hero1.restricty)
+        if not hero1.weapon.attacking:
+            hero1.weapon.rect.x = hero1.rect.x
+            hero1.weapon.rect.y = hero1.rect.y
+        else:
+            hero1.weapon.rect.x = hero1.rect.x + hero1.weapon.ani_x
+            hero1.weapon.rect.y = hero1.rect.y
 
         item_list.draw(surface)
+        weapon_list.draw(surface)
         monster_list.draw(surface)
         pygame.display.flip()
 

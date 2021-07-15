@@ -17,6 +17,7 @@ class Hero(pygame.sprite.Sprite):
         self.spritesl.append(pygame.image.load('image/hero_f2l.png'))
         self.spritesl.append(pygame.image.load('image/hero_f3l.png'))
         self.current = 0
+        self.left = False
         self.image = self.sprites[self.current]
         self.image.set_colorkey((0, 0, 0))
         self.rect = self.image.get_rect()
@@ -56,10 +57,12 @@ class Hero(pygame.sprite.Sprite):
         if self.movex > 0 or self.movey != 0:
             if self.current >= len(self.sprites):
                 self.current = 0
+                self.left = False
             self.image = self.sprites[int(self.current)]
         if self.movex < 0:
             if self.current >= len(self.spritesl):
                 self.current = 0
+                self.left = True
             self.image = self.spritesl[int(self.current)]
         # go back if touch the boundry
         back = 32
