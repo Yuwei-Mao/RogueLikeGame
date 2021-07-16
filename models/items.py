@@ -86,7 +86,7 @@ class Book(Item):
 
     def effect(self, player):
         r_n = random.randint(1, 4)
-        if r_n == 1:
+        if r_n <= 1:
             player.attack += 2
         elif r_n == 2:
             player.upgrade_weapon()

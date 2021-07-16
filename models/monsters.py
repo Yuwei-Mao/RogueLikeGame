@@ -29,7 +29,7 @@ class Monster(monsterview.Enemy):
         return s
 
     def attack_player(self, player):
-        '''attacks a player'''
+        """attacks a player"""
         if self.frame_count == self.interval:
             player.get_damage(self.attack)
             self.frame_count = 0
@@ -93,14 +93,13 @@ class Ooze(Monster):
 class Boss(Monster):
 
     def __init__(self):
-        Monster.__init__(self, 512, 384, "boss", 20, 150, 30, 50, .3)
-        self.max_health = 100
+        Monster.__init__(self, 512, 384, "boss", 20, 600, 16, 50, .3)
 
 
 class Bullet(Monster):
 
     def __init__(self, x, y):
-        Monster.__init__(self, x, y, "bullet", 0, 1, 10, 0, 1)
+        Monster.__init__(self, x, y, "bullet", 1, 1, 10, 5, 1.5)
 
 
 """ end monster classes """
