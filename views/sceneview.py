@@ -42,6 +42,19 @@ class GameOver(Scene):
             self.gameover_rect, myfontobj, (255, 255, 255), over_text)
 
 
+class youwin(Scene):
+    def __init__(self):
+        Scene.__init__(self, 'image/bg/bg2.png', 1024, 400, 550, 730, 450, 520)
+        myfontobj = setup_fonts(25)
+        over_text = '''        Congratulations, You won!!!
+        Thank you for playing the game
+        hit "return" key to start all over
+        to quit the game, hit "Q"'''
+        self.gameover_rect = pygame.Rect(260, 240, 500, 200)
+        self.gameover_surface = word_wrap(
+            self.gameover_rect, myfontobj, (255, 255, 255), over_text)
+
+
 class Menu(Scene):
     def __init__(self):
         Scene.__init__(self, 'image/bg/bg1.png', 1024, 0, 550, 810, 470, 550)

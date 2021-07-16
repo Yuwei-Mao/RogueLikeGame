@@ -47,6 +47,28 @@ class Enemy(pygame.sprite.Sprite):
                 'image/monsters/eyeball/eyeball_l2.png'))
             self.spritesl.append(pygame.image.load(
                 'image/monsters/eyeball/eyeball_l3.png'))
+        elif self.race == "boss":
+            self.sprites.append(pygame.image.load(
+                'image/monsters/boss/boss_1.png'))
+            self.sprites.append(pygame.image.load(
+                'image/monsters/boss/boss_2.png'))
+            self.sprites.append(pygame.image.load(
+                'image/monsters/boss/boss_3.png'))
+            self.sprites.append(pygame.image.load(
+                'image/monsters/boss/boss_4.png'))
+            self.spritesl.append(pygame.image.load(
+                'image/monsters/boss/boss_l1.png'))
+            self.spritesl.append(pygame.image.load(
+                'image/monsters/boss/boss_l2.png'))
+            self.spritesl.append(pygame.image.load(
+                'image/monsters/boss/boss_l3.png'))
+            self.spritesl.append(pygame.image.load(
+                'image/monsters/boss/boss_l4.png'))
+        elif self.race == "bullet":
+            self.sprites.append(pygame.image.load(
+                'image/monsters/boss/bullet_l.png'))
+            self.spritesl.append(pygame.image.load(
+                'image/monsters/boss/bullet.png'))
         self.current = 0
         self.image = self.sprites[self.current]
         self.rect = self.image.get_rect()

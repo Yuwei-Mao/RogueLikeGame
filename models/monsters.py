@@ -8,10 +8,11 @@ from views import monsterview
 class Monster(monsterview.Enemy):
 
     def __init__(self, x, y, race, gold, health, attack, interval, vel):
-        '''
+        """
             interval - how many frames a monster wait to make the next attack
             frame_count - count the number of frames that has already passed
-        '''
+
+        """
         monsterview.Enemy.__init__(self, race)
         self.x = x
         self.y = y
@@ -87,6 +88,19 @@ class Ooze(Monster):
 
     def __str__(self):
         pass
+
+
+class Boss(Monster):
+
+    def __init__(self):
+        Monster.__init__(self, 512, 384, "boss", 20, 100, 30, 50, .3)
+        self.max_health = 100
+
+
+class Bullet(Monster):
+
+    def __init__(self, x, y):
+        Monster.__init__(self, x, y, "bullet", 0, 1, 10, 0, 1)
 
 
 """ end monster classes """

@@ -8,10 +8,12 @@ from models import players
 from models import monsters
 from models import items
 from models import weapons
-from models import boss
 from views import sceneview
 
+
 gamelevel = 0
+
+
 def main():
     pygame.init()
     pygame.font.get_fonts()
@@ -42,7 +44,7 @@ def main():
     player_list = pygame.sprite.Group()
     player_list.add(hero1)
 
-    frame_count = 0
+    boss_frame = -1
     attack_frame = 0
     icon_index = 0
     title_x0 = 230
@@ -60,12 +62,13 @@ def main():
     started = False
     hero1.setPos(120, 530)
 
+    boss_dead = False
+
     global gamelevel
     gamelevel = 0
+
     """game loop"""
     while True:
-        frame_count += 1
-
         quit, up, down, left, right, up_up, down_up, left_up, right_up, attack, dash, dash_up, next = controller.KeyEvents.check_events()
 
         speed = 3
@@ -139,11 +142,15 @@ def main():
                              menu_scene.wrapped_rect)
 
         '''death detection. comment these lines if you wish'''
-        if hero1.isDead():
+        if hero1.isDead() or (gamelevel == 1 and boss_dead):
             # hero is dead, game over screen
+
             player_list.empty()
             weapon_list.empty()
-            over_scene = sceneview.GameOver()
+            if hero1.isDead():
+                over_scene = sceneview.GameOver()
+            else:
+                over_scene = sceneview.youwin()
             surface.blit(over_scene.background, (0, 0))
             s = pygame.Surface((1024, 768), pygame.SRCALPHA)
             s.fill((255, 255, 255, 50))
@@ -152,6 +159,7 @@ def main():
                          over_scene.gameover_rect)
             if next:
                 # create hero1 and monsters
+                gamelevel = 0
                 hero1 = players.Player("hero1")
                 (scene, monster_list) = rand_scene(hero1)
                 background = scene.background
@@ -161,11 +169,21 @@ def main():
                 item_list = pygame.sprite.Group()
                 weapon_list = pygame.sprite.Group()
                 weapon_list.add(hero1.weapon)
-                gamelevel = 0
+                boss_dead = False
+                boss_frame = -1
 
         elif started:
-            # game start
 
+            # boss set up
+            if gamelevel == 1:
+                if boss_frame == -1:
+                    boss = monsters.Boss()
+                    monster_list.add(boss)
+                boss_frame += 1
+                if boss.isDead():
+                    boss_dead = True
+
+            # game start
             hero1.update()
 
             collide_monsters = pygame.sprite.groupcollide(
@@ -174,7 +192,20 @@ def main():
             if collide_monsters:
                 for mon in collide_monsters.values():
                     for m in mon:
+                        if m.race == "bullet":
+                            hero1.get_damage(m.attack)
+                            m.kill()
                         m.attack_player(hero1)
+
+            # boss attack
+            if gamelevel == 1 and boss_frame >= 300:
+                if boss_frame % 100 == 0:
+                    monster_list.add(monsters.Bullet(boss.x, boss.y))
+                if boss_frame >= 800:
+                    for m in monster_list:
+                        if m.race == "bullet":
+                            m.kill()
+                    boss_frame = 0
 
             collide_items = pygame.sprite.groupcollide(
                 player_list, item_list, False, True, collided=pygame.sprite.collide_circle)
@@ -227,7 +258,7 @@ def main():
             if len(monster_list) == 0:
                 icon_index = (icon_index + 0.04) % len(arrow)
                 surface.blit(arrow[int(icon_index)],
-                             ((scene.door_xl + scene.door_xr)/2, scene.door_yl))
+                             ((scene.door_xl + scene.door_xr) / 2, scene.door_yl))
                 if next:
                     next_level = scene.next_level(
                         hero1)
@@ -255,7 +286,7 @@ def main():
 
 
 def rand_scene(hero):
-    global gamelevekl
+    global gamelevel
     rand = random.randint(1, 6)
     if rand <= 3:
         scene = sceneview.Club()
@@ -264,14 +295,17 @@ def rand_scene(hero):
     hero.setPlayGround(scene.border_x, scene.border_y)
     hero.setPos(100, 500)
     monster_list = pygame.sprite.Group()
-    for _ in range(random.randint(4, 7)):
-        x = random.randint(1, 10)
-        if x <= 5:
-            monster = monsters.Slime(gamelevel)
-        elif x <= 10:
-            monster = monsters.Eyeball(gamelevel)
-        monster.setPlayGround(scene.border_x, scene.border_x)
-        monster_list.add(monster)
+    if gamelevel == 1:
+        pass
+    else:
+        for _ in range(random.randint(4, 7)):
+            x = random.randint(1, 10)
+            if x <= 5:
+                monster = monsters.Slime(gamelevel)
+            elif x <= 10:
+                monster = monsters.Eyeball(gamelevel)
+            monster.setPlayGround(scene.border_x, scene.border_x)
+            monster_list.add(monster)
     return scene, monster_list
 
 
