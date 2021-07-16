@@ -8,6 +8,7 @@ from models import players
 from models import monsters
 from models import items
 from models import weapons
+from models import boss
 from views import sceneview
 
 gamelevel = 0
