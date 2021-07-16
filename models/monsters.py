@@ -93,7 +93,7 @@ class Ooze(Monster):
 class Boss(Monster):
 
     def __init__(self):
-        Monster.__init__(self, 512, 384, "boss", 20, 100, 30, 50, .3)
+        Monster.__init__(self, 512, 384, "boss", 20, 150, 30, 50, .3)
         self.max_health = 100
 
 

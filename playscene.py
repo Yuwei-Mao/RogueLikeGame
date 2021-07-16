@@ -142,7 +142,7 @@ def main():
                              menu_scene.wrapped_rect)
 
         '''death detection. comment these lines if you wish'''
-        if hero1.isDead() or (gamelevel == 1 and boss_dead):
+        if hero1.isDead() or (gamelevel == 6 and boss_dead):
             # hero is dead, game over screen
 
             player_list.empty()
@@ -175,7 +175,7 @@ def main():
         elif started:
 
             # boss set up
-            if gamelevel == 1:
+            if gamelevel == 6:
                 if boss_frame == -1:
                     boss = monsters.Boss()
                     monster_list.add(boss)
@@ -198,7 +198,7 @@ def main():
                         m.attack_player(hero1)
 
             # boss attack
-            if gamelevel == 1 and boss_frame >= 300:
+            if gamelevel == 6 and boss_frame >= 300:
                 if boss_frame % 100 == 0:
                     monster_list.add(monsters.Bullet(boss.x, boss.y))
                 if boss_frame >= 800:
@@ -295,7 +295,7 @@ def rand_scene(hero):
     hero.setPlayGround(scene.border_x, scene.border_y)
     hero.setPos(100, 500)
     monster_list = pygame.sprite.Group()
-    if gamelevel == 1:
+    if gamelevel == 6:
         pass
     else:
         for _ in range(random.randint(4, 7)):
