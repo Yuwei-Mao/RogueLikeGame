@@ -13,7 +13,8 @@ class Player(playerview.Hero):
         self.name = name
         self.attack = random.randrange(1, 5)
         self.weapon = weapons.Sword()
-        self.attack += self.weapon.attack
+        self.weapon_index = 1
+        self.attack = self.attack + self.weapon.attack
         self.interval = 3
         self.frame_count = self.interval
         self.gold = 0
@@ -50,6 +51,14 @@ class Player(playerview.Hero):
                     monster_list.remove(monster)
         return (self.vis_attack(True), damage_list)
 
+    def attack_monster_long_range(self, attack_monsters, monster_list):
+        """attacks a monster in long range"""
+        for col in attack_monsters:
+            col.health = 0
+            if col.health <= 0:
+                monster_list.remove(col)
+        return monster_list
+
     def get_health(self, value):
         if self.current_health + value <= self.max_health:
             self.current_health += value
@@ -61,6 +70,17 @@ class Player(playerview.Hero):
             self.current_health -= value
         if self.current_health <= 0:
             self.current_health = 0
+
+    def upgrade_weapon(self):
+        if self.weapon_index == 1:
+            self.weapon = weapons.Sword2()
+            self.weapon_index = 2
+            self.attack = self.attack + self.weapon.attack
+        elif self.weapon_index == 2:
+            self.weapon = weapons.Sword3()
+            self.weapon_index = 3
+            self.attack = self.attack + self.weapon.attack
+
 
     def isDead(self):
         return self.current_health == 0

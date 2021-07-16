@@ -26,6 +26,16 @@ class Sword(Weapon):
         Weapon.__init__(self, "sword1", 5, 2)
 
 
+class Sword2(Weapon):
+    def __init__(self):
+        Weapon.__init__(self, "sword2", 8, 2)
+
+
+class Sword3(Weapon):
+    def __init__(self):
+        Weapon.__init__(self, "sword3", 12, 2)
+
+
 class Arrow():
     def __init__(self):
         Weapon.__init__(self, "arrow", 7, 3)

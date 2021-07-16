@@ -17,7 +17,6 @@ class Hero(pygame.sprite.Sprite):
         self.spritesl.append(pygame.image.load('image/hero_f2l.png'))
         self.spritesl.append(pygame.image.load('image/hero_f3l.png'))
         self.current = 0
-        self.left = False
         self.image = self.sprites[self.current]
         self.image.set_colorkey((0, 0, 0))
         self.rect = self.image.get_rect()
@@ -25,14 +24,17 @@ class Hero(pygame.sprite.Sprite):
         self.movey = 0
         self.rect.x = 100
         self.rect.y = 500
+        self.left = (self.movex < 0)
         """ Health bar"""
-        self.current_health = 100
-        self.max_health = 100
+        self.current_health = 200
+        self.max_health = 200
         self.health_bar_length = 400
         self.health_ratio = self.health_bar_length / self.max_health
         """ Play ground """
         self.restrictx = 1024
         self.restricty = 0
+
+        self.attack = 0
 
     def setPlayGround(self, x, y):
         self.restrictx = x
@@ -81,14 +83,15 @@ class Hero(pygame.sprite.Sprite):
         pygame.draw.rect(surface, (255, 255, 255),
                          (50, 50, self.health_bar_length, 25), 4)
         font = setup_fonts(18)
-        return font.render(f"Health: {int(self.current_health)}/{self.max_health}", True, (255, 255, 255))
+        return font.render(f"Health: {int(self.current_health)}/{self.max_health}         Attack: {int(self.attack)}",
+                           True, (255, 255, 255))
 
     def vis_attack(self, vis):
         black = (0, 0, 0)
         white = (255, 255, 255)
         font = setup_fonts(18)
         if vis:
-            text_surface = font.render("ATK", True, white, black)
+            text_surface = font.render("", True, white, black)
             return text_surface
         else:
             return font.render("", True, white, black)
@@ -104,16 +107,7 @@ class Hero(pygame.sprite.Sprite):
 
 
 def setup_fonts(font_size, bold=False, italic=False):
-    ''' Load a font, given a list of preferences
 
-        The preference list is a sorted list of strings (should probably be a parameter),
-        provided in a form from the FontBook list.
-        Any available font that starts with the same letters (lowercased, spaces removed)
-        as a font in the font_preferences list will be loaded.
-        If no font can be found from the preferences list, the pygame default will be returned.
-
-        returns -- A Font object
-    '''
     font_preferences = ['Bangers', 'Iosevka Regular',
                         'Comic Sans', 'Courier New']
     available = pygame.font.get_fonts()

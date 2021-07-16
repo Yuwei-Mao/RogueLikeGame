@@ -1,6 +1,7 @@
 #! /usr/bin/env python3
 import random
 from views import itemview
+import pygame
 
 """ start items classes """
 
@@ -51,7 +52,7 @@ class BloodBottle(Item):
         pass
 
     def effect(self, player):
-        player.get_health(player.max_health/5)
+        player.get_health(player.max_health/4)
 
 
 class ChickenLeg(Item):
@@ -67,3 +68,53 @@ class ChickenLeg(Item):
 
     def effect(self, player):
         player.attack += 2
+
+
+class Book(Item):
+    """
+        random effect:
+        Increase attack
+        upgrade weapon
+        restore health
+    """
+
+    def __init__(self, x, y):
+        Item.__init__(self, 'book', x, y)
+
+    def __str__(self):
+        pass
+
+    def effect(self, player):
+        r_n = random.randint(1, 4)
+        if r_n == 1:
+            player.attack += 2
+        elif r_n == 2:
+            player.upgrade_weapon()
+        elif r_n == 3:
+            player.get_health(player.max_health / 4)
+        elif r_n == 4:
+            player.get_health(player.max_health / 4)
+
+
+class Bomb(Item):
+    """
+        Increase attack
+    """
+
+    def __init__(self, x, y):
+        Item.__init__(self, 'bomb', x, y)
+
+    def __str__(self):
+        pass
+
+    def effect(self, player, monster_list):
+        for i in monster_list:
+            r_n = (abs(self.rect.x - i.rect.x)**2 + abs(self.rect.y - i.rect.y)**2)**0.5
+            if r_n <= 350:
+                monster_list = player.attack_monster_long_range(pygame.sprite.Group(i), monster_list)
+        return monster_list
+
+
+
+
+

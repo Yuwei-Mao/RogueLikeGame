@@ -13,6 +13,17 @@ class Arms(pygame.sprite.Sprite):
             self.sprites.append(pygame.image.load('image/weapons/null.png'))
             self.sprites.append(pygame.image.load('image/weapons/sword1.png'))
             self.sprites.append(pygame.image.load('image/weapons/sword1_L.png'))
+            self.attack_range = 4
+        elif self.item == "sword2":
+            self.sprites.append(pygame.image.load('image/weapons/null.png'))
+            self.sprites.append(pygame.image.load('image/weapons/sword2.png'))
+            self.sprites.append(pygame.image.load('image/weapons/sword2_L.png'))
+            self.attack_range = 6
+        elif self.item == "sword3":
+            self.sprites.append(pygame.image.load('image/weapons/null.png'))
+            self.sprites.append(pygame.image.load('image/weapons/sword3.png'))
+            self.sprites.append(pygame.image.load('image/weapons/sword3_L.png'))
+            self.attack_range = 8
 
         self.current = 0
         self.image = self.sprites[self.current]
@@ -25,7 +36,6 @@ class Arms(pygame.sprite.Sprite):
         self.ani_x = 0
 
         self.attacking = False
-        self.attack_range = 2
 
     def update(self, x, y) -> None:
         pass

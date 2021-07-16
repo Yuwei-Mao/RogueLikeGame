@@ -15,6 +15,10 @@ class Drop(pygame.sprite.Sprite):
             self.sprites.append(pygame.image.load('image/drops/blood_bottle.png'))
         elif self.item == "chicken_leg":
             self.sprites.append(pygame.image.load('image/drops/chicken_leg.png'))
+        elif self.item == "book":
+            self.sprites.append(pygame.image.load('image/drops/book.png'))
+        elif self.item == "bomb":
+            self.sprites.append(pygame.image.load('image/drops/bomb.png'))
 
         self.current = 0
         self.image = self.sprites[self.current]

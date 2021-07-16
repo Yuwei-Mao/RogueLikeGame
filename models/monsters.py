@@ -43,10 +43,13 @@ class Eyeball(Monster):
         killing an eyeball rewards player 5 gold
     """
 
-    def __init__(self):
+    def __init__(self, level):
         Monster.__init__(self, random.randint(
-            40, 1020), random.randint(450, 650), "eyeball", 5, 50, 7, 70, 1)
+            40, 1020), random.randint(450, 650), "eyeball", 5, 30, 6, 70, 1)
         self.yell = '"SsSsSSss"'
+        self.level = level
+        self.attack += level * random.randint(1, 2)
+        self.health += level * random.randint(1, 3)
 
     def __str__(self):
         pass
@@ -57,10 +60,13 @@ class Slime(Monster):
         killing a slime rewards player 6 gold
     """
 
-    def __init__(self):
+    def __init__(self, level):
         Monster.__init__(self, random.randint(
-            40, 1020), random.randint(450, 650), "slime", 6, 60, 5, 80, .5)
+            40, 1020), random.randint(450, 650), "slime", 6, 35, 5, 80, .5)
         self.yell = '"#%@&$/?!"'
+        self.level = level
+        self.attack += level * random.randint(1, 2)
+        self.health += level * random.randint(1, 3)
 
     def __str__(self):
         pass
@@ -71,10 +77,13 @@ class Ooze(Monster):
         killing a ooze rewards player 3 gold
     """
 
-    def __init__(self):
+    def __init__(self, level):
         Monster.__init__(self, random.randint(
             40, 1020), random.randint(450, 650), "ooze", 3, 15, 13, 30, .7)
         self.yell = '"......"'
+        self.level = level
+        self.attack += level / 2
+        self.health += level
 
     def __str__(self):
         pass
