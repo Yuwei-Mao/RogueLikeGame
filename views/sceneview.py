@@ -29,6 +29,16 @@ class Street(Scene):
         Scene.__init__(self, 'image/bg/bg1.png', 1024, 0, 840, 950, 600, 680)
 
 
+class Skyline(Scene):
+    def __init__(self):
+        Scene.__init__(self, 'image/bg/bg2.png', 1024, 0, 840, 950, 600, 680)
+
+
+class Beach(Scene):
+    def __init__(self):
+        Scene.__init__(self, 'image/bg/bg3.png', 1024, 0, 840, 950, 600, 680)
+
+
 class GameOver(Scene):
     def __init__(self):
         Scene.__init__(self, 'image/bg/bg4.png', 1024, 400, 550, 730, 450, 520)

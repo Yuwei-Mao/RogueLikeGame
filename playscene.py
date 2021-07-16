@@ -293,11 +293,15 @@ def main():
 # generate random scene and monsters
 def rand_scene(hero):
     global gameLevel
-    rand = random.randint(1, 6)
-    if rand <= 3:
+    rand = random.randint(1, 4)
+    if rand == 1:
         scene = sceneview.Club()
-    else:
+    elif rand == 2:
         scene = sceneview.Street()
+    elif rand == 3:
+        scene = sceneview.Skyline()
+    else:
+        scene = sceneview.Beach()
     hero.setPlayGround(scene.border_x, scene.border_y)
     hero.setPos(100, 500)
     monster_list = pygame.sprite.Group()
