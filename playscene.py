@@ -189,6 +189,9 @@ def main():
             hero1.update()
 
             collide_monsters = pygame.sprite.groupcollide(
+                player_list, monster_list, False, False, collided=pygame.sprite.collide_circle)
+
+            attack_monsters = pygame.sprite.groupcollide(
                 weapon_list, monster_list, False, False, collided=pygame.sprite.collide_circle)
 
             # monster collision
@@ -239,7 +242,7 @@ def main():
             if attack:
                 attack_sound.play()
                 (text_surface, damage_list) = hero1.attack_monster(
-                    collide_monsters, monster_list)
+                    attack_monsters, monster_list)
 
             if attack or attack_frame > 0:
                 # attack animation
