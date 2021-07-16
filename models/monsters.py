@@ -99,7 +99,7 @@ class Boss(Monster):
 class Bullet(Monster):
 
     def __init__(self, x, y):
-        Monster.__init__(self, x, y, "bullet", 1, 1, 10, 5, 1.5)
+        Monster.__init__(self, x, y, "bullet", 1, 1, 10, 50, 1.5)
 
 
 """ end monster classes """
